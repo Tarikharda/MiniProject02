@@ -3,12 +3,22 @@ package com.example.miniproject02;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     ImageView btnSave, btn_profile, btnStar1, btnStar2, btnStar3, btnStar4, btnStar5;
@@ -16,7 +26,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     static int counter = 1;
     static boolean saved = false;
     static boolean iStar1 = false, iStar2 = false, iStar3 = false, iStar4 = false, iStar5 = false;
+    static String URL;
+    TextView tvFullName, tvCity;
+    ImageView ivUserProfile;
 
+    @SuppressLint("DefaultLocale")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +43,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnStar3 = findViewById(R.id.btn_star3);
         btnStar4 = findViewById(R.id.btn_star4);
         btnStar5 = findViewById(R.id.btn_star5);
-
+        tvFullName = findViewById(R.id.tv_FullName);
+        tvCity = findViewById(R.id.tv_city);
+        ivUserProfile = findViewById(R.id.iv_user_profile);
         btnStar1.setOnClickListener(this);
         btnStar2.setOnClickListener(this);
         btnStar3.setOnClickListener(this);
@@ -37,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnStar5.setOnClickListener(this);
         btnSave.setOnClickListener(this);
 
+        URL = String.format("https://dummyjson.com/users/%d", new Random().nextInt(100));
+        getRandomUser();
     }
 
     @Override
@@ -99,5 +117,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 saved = true;
             }
         }
+    }
+
+    public void getRandomUser() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        @SuppressLint("SetTextI18n") JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                URL,
+                null,
+                response -> {
+                    try {
+                        tvFullName.setText(response.getString("firstName") +" "+ response.getString("lastName"));
+                        JSONObject addressObject = response.getJSONObject("address");
+                        tvCity.setText("From "+addressObject.getString("city"));
+                        String imgUrl = response.getString("image");
+                        Picasso.get().load(imgUrl).into(ivUserProfile);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                }, error -> {
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+        });
+        queue.add(jsonObjectRequest);
     }
 }

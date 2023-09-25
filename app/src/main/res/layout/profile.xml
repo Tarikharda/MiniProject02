@@ -15,8 +15,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/btn_fav1"
+    <ImageView
+        android:id="@+id/btn_star1"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginRight="20dp"
@@ -25,39 +25,39 @@
         app:layout_constraintEnd_toEndOf="@+id/iv_user_profile"
         app:layout_constraintTop_toBottomOf="@id/iv_user_profile" />
 
-    <ImageButton
-        android:id="@+id/btn_fav2"
+    <ImageView
+        android:id="@+id/btn_star2"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:background="@drawable/unstar"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btn_fav1"
+        app:layout_constraintEnd_toStartOf="@id/btn_star1"
         app:layout_constraintTop_toBottomOf="@id/iv_user_profile" />
 
-    <ImageButton
-        android:id="@+id/btn_fav3"
+    <ImageView
+        android:id="@+id/btn_star3"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:background="@drawable/unstar"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btn_fav2"
+        app:layout_constraintEnd_toStartOf="@id/btn_star2"
         app:layout_constraintTop_toBottomOf="@id/iv_user_profile" />
 
-    <ImageButton
-        android:id="@+id/btn_fav4"
+    <ImageView
+        android:id="@+id/btn_star4"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:background="@drawable/unstar"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btn_fav3"
+        app:layout_constraintEnd_toStartOf="@id/btn_star3"
         app:layout_constraintTop_toBottomOf="@id/iv_user_profile" />
 
-    <ImageButton
-        android:id="@+id/btn_fav5"
+    <ImageView
+        android:id="@+id/btn_star5"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:background="@drawable/unstar"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btn_fav4"
+        app:layout_constraintEnd_toStartOf="@id/btn_star4"
         app:layout_constraintTop_toBottomOf="@id/iv_user_profile" />
 </androidx.constraintlayout.widget.ConstraintLayout>

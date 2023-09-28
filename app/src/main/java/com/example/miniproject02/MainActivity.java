@@ -3,7 +3,9 @@ package com.example.miniproject02;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,14 +23,15 @@ import org.json.JSONObject;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    ImageView btnSave, btn_profile, btnStar1, btnStar2, btnStar3, btnStar4, btnStar5;
+    ImageView btnSave, btnProfile, btnStar1, btnStar2, btnStar3, btnStar4, btnStar5;
 
     static int counter = 1;
     static boolean saved = false;
     static boolean iStar1 = false, iStar2 = false, iStar3 = false, iStar4 = false, iStar5 = false;
-    static String URL;
+    static String URL, IMAGEPATH;
     TextView tvFullName, tvCity;
     ImageView ivUserProfile;
+    SharedPreferences saveUserInfo;
 
     @SuppressLint("DefaultLocale")
     @Override
@@ -37,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         btnSave = findViewById(R.id.btn_save);
-        btn_profile = findViewById(R.id.btn_profile);
+        btnProfile = findViewById(R.id.btn_profile);
         btnStar1 = findViewById(R.id.btn_star1);
         btnStar2 = findViewById(R.id.btn_star2);
         btnStar3 = findViewById(R.id.btn_star3);
@@ -52,9 +55,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnStar4.setOnClickListener(this);
         btnStar5.setOnClickListener(this);
         btnSave.setOnClickListener(this);
+        btnProfile.setOnClickListener(this);
 
         URL = String.format("https://dummyjson.com/users/%d", new Random().nextInt(100));
-        getRandomUser();
+        saveUserInfo = getSharedPreferences("savedUser", MODE_PRIVATE);
+        String fullName = saveUserInfo.getString("fullName", null);
+        if (fullName == null) {
+            getRandomUser();
+        } else {
+            tvFullName.setText(fullName);
+            tvCity.setText(saveUserInfo.getString("city", null));
+            Picasso.get().load(saveUserInfo.getString("imgPath", null)).into(ivUserProfile);
+            saved = true;
+            btnSave.setImageResource(R.drawable.save);
+        }
     }
 
     @Override
@@ -109,13 +123,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         if (view.getId() == R.id.btn_save) {
+            SharedPreferences.Editor editor = saveUserInfo.edit();
+            String fullName = null;
+            String city = null;
             if (saved) {
                 btnSave.setImageResource(R.drawable.unsave);
-                saved = false;
+                saved = !saved;
+                getRandomUser();
             } else {
+                fullName = tvFullName.getText().toString();
+                city = tvCity.getText().toString();
                 btnSave.setImageResource(R.drawable.save);
-                saved = true;
+                saved = !saved;
             }
+            editor.putString("fullName", fullName);
+            editor.putString("city", city);
+            editor.putString("imgPath", IMAGEPATH);
+            editor.apply();
+        }
+        if (view.getId() == R.id.btn_profile) {
+
         }
     }
 
@@ -127,10 +154,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 null,
                 response -> {
                     try {
-                        tvFullName.setText(response.getString("firstName") +" "+ response.getString("lastName"));
+                        tvFullName.setText(response.getString("firstName") + " " + response.getString("lastName"));
                         JSONObject addressObject = response.getJSONObject("address");
-                        tvCity.setText("From "+addressObject.getString("city"));
+                        tvCity.setText("From " + addressObject.getString("city"));
                         String imgUrl = response.getString("image");
+                        IMAGEPATH = imgUrl;
                         Picasso.get().load(imgUrl).into(ivUserProfile);
                     } catch (JSONException e) {
                         throw new RuntimeException(e);

@@ -12,8 +12,8 @@
         android:layout_height="48dp"
         android:layout_margin="8dp"
         android:background="@drawable/profile"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/btn_save"
@@ -33,17 +33,16 @@
         android:layout_height="48dp"
         android:layout_margin="8dp"
         android:background="@drawable/profile"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <include
         android:id="@+id/include_profile_layout"
         layout="@layout/profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="239dp"
+        android:layout_height="443dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.584"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
